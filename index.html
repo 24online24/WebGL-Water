@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta content='text/html;charset=utf-8' http-equiv='Content-Type' />
+</head>
+
+<body>
+  <div id='webgl-water'></div>
+
+  <script src='/webgl_water.js'></script>
+
+  <script>
+    window.addEventListener('load', () => {
+      window.wasm_bindgen('/webgl_water_bg.wasm').then(() => {
+        const webClient = new window.wasm_bindgen.WebClient()
+        webClient.start()
+
+        let time = Date.now()
+        const render = () => {
+          const dt = Date.now() - time
+
+          webClient.update(dt)
+          webClient.render()
+          window.requestAnimationFrame(render)
+
+          time = Date.now()
+        }
+
+        render()
+      })
+    })
+  </script>
+</body>
+
+</html>
